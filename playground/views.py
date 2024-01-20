@@ -7,6 +7,7 @@ from store.models import Product
 
 def say_hello(request):
     # Products: inventory < 10 OR price < 20
-    queryset = Product.objects.filter(inventory=F('collection__id'))
+    product = Product.objects.order_by('unit_price')[0]
+    product = Product.objects.earliest('unit_price')
 
-    return render(request, 'hello.html', {'name': 'Bikram', 'products': list(queryset)})
+    return render(request, 'hello.html', {'name': 'Bikram', 'product': product})
