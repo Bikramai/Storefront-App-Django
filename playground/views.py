@@ -1,26 +1,10 @@
 from django.shortcuts import render
-from django.db.models import Q, F
-from django.http import HttpResponse
-from django.core.exceptions import ObjectDoesNotExist
-from store.models import Product, Order
+from django.db.models.aggregates import Count, Max, Min, Avg, Sum
+from store.models import Product
 
 
-# def say_hello(request):
-#     # select_related(1)
-#     # prefetch_related (n)
-#     queryset = Product.objects.prefetch_related(
-#         'promotions').select_related('collection').all()
-
-#     return render(request, 'hello.html', {'name': 'Bikram', 'products': list(queryset)})
-
-
-# Exercise
-# Get the last 5 orders with their customer
-# and items (include product)
 def say_hello(request):
-    # select_related(1)
-    # prefetch_related (n)
-    queryset = Order.objects.select_related(
-        'customer').prefetch_related('orderitem_set__product').order_by('-placed_at')[:5]
+    result = Product.objects.filter(collection__id=1).aggregate(
+        count=Count('id'), min_price=Min('unit_price'))
 
-    return render(request, 'hello.html', {'name': 'Bikram', 'orders': list(queryset)})
+    return render(request, 'hello.html', {'name': 'Bikram', 'result': result})
