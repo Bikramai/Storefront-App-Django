@@ -7,9 +7,7 @@ from store.models import Product
 
 
 def say_hello(request):
-    #None
-    exists = Product.objects.filter(pk=0).exists()
-   
+    queryset = Product.objects.filter(title__icontains='coffee')
     
 
-    return render(request, 'hello.html', {'name': 'Bikram'})
+    return render(request, 'hello.html', {'name': 'Bikram', 'products': list(queryset)})
