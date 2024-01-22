@@ -4,13 +4,11 @@ from tags.models import TaggedItem
 
 
 def say_hello(request):
-    # collection = Collection(pk=11)
-    # collection.title = 'Games'
-    # collection.featured_product = None
-    # collection.save()
+    collection = Collection(pk=11)
+    collection.delete() #deleting only one object
 
 
-    Collection.objects.filter(pk=11).update(featured_product=None)
+    Collection.objects.filter(id__gt=5).delete() #deleteing multiple objects 
 
 
 
