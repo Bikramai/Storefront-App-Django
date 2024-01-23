@@ -60,6 +60,7 @@ class CollectionAdmin(admin.ModelAdmin):
     list_display = ['title', 'products_count']
     search_fields = ['title']
 
+
     @admin.display(ordering='products_count')
     def products_count(self, collection):
         url = (
@@ -69,6 +70,7 @@ class CollectionAdmin(admin.ModelAdmin):
                 'collection__id': str(collection.id)
             }))
         return format_html('<a href="{}">{} Products</a>', url, collection.products_count)
+    
 
     def get_queryset(self, request):
         return super().get_queryset(request).annotate(
