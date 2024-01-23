@@ -22,7 +22,7 @@ class InventoryFilter(admin.SimpleListFilter):
 
 @admin.register(models.Product)
 class ProductAdmin(admin.ModelAdmin):
-    autocomplete_fields = ['collection']
+    autocomplete_fields = ['collection'] #Custome Forms
     prepopulated_fields = {
         'slug': ['title']
     }
