@@ -104,7 +104,7 @@ class CustomerAdmin(admin.ModelAdmin):
 # Editing Children Using Inlines
 
 
-class OrderItemInline(admin.TabularInline):
+class OrderItemInline(admin.TabularInline): 
     autocomplete_fields = ['product']
     min_num = 1
     max_num = 10
@@ -117,3 +117,4 @@ class OrderAdmin(admin.ModelAdmin):
     autocomplete_fields = ['customer']
     inlines = [OrderItemInline]
     list_display = ['id', 'placed_at', 'customer']
+
