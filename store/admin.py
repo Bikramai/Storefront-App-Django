@@ -1,8 +1,11 @@
 from django.contrib import admin, messages
+from django.contrib.contenttypes.admin import GenericTabularInline
 from django.db.models.aggregates import Count
 from django.db.models.query import QuerySet
 from django.utils.html import format_html, urlencode
 from django.urls import reverse
+
+from tags.models import TaggedItem
 from . import models
 
 
@@ -18,6 +21,10 @@ class InventoryFilter(admin.SimpleListFilter):
     def queryset(self, request, queryset: QuerySet):
         if self.value() == '<10':
             return queryset.filter(inventory__lt=10)
+        
+class TagInline(GenericTabularInline):
+    autocomplete_fields = ['tag']
+    model = TaggedItem
 
 
 @admin.register(models.Product)
@@ -27,6 +34,7 @@ class ProductAdmin(admin.ModelAdmin):
         'slug': ['title']
     }
     actions = ['clear_inventory'] # List of Action we want to show users
+    inlines = [TagInline]
     list_display = ['title', 'unit_price',
                     'inventory_status', 'collection_title']
     list_editable = ['unit_price']
@@ -107,7 +115,7 @@ class OrderItemInline(admin.TabularInline):
     max_num = 10
     model = models.OrderItem
     extra = 0
-    
+
 
 
 @admin.register(models.Order)
