@@ -1,11 +1,8 @@
 from django.contrib import admin, messages
-from django.contrib.contenttypes.admin import GenericTabularInline
 from django.db.models.aggregates import Count
 from django.db.models.query import QuerySet
 from django.utils.html import format_html, urlencode
 from django.urls import reverse
-
-from tags.models import TaggedItem
 from . import models
 
 
@@ -21,20 +18,16 @@ class InventoryFilter(admin.SimpleListFilter):
     def queryset(self, request, queryset: QuerySet):
         if self.value() == '<10':
             return queryset.filter(inventory__lt=10)
-        
-class TagInline(GenericTabularInline):
-    autocomplete_fields = ['tag']
-    model = TaggedItem
 
 
 @admin.register(models.Product)
 class ProductAdmin(admin.ModelAdmin):
-    autocomplete_fields = ['collection'] #Custome Forms
+    autocomplete_fields = ['collection']  # Custome Forms
     prepopulated_fields = {
         'slug': ['title']
     }
-    actions = ['clear_inventory'] # List of Action we want to show users
-    inlines = [TagInline]
+    actions = ['clear_inventory']  # List of Action we want to show users
+
     list_display = ['title', 'unit_price',
                     'inventory_status', 'collection_title']
     list_editable = ['unit_price']
@@ -58,8 +51,8 @@ class ProductAdmin(admin.ModelAdmin):
         updated_count = queryset.update(inventory=0)
         self.message_user(
             request,
-            f'{updated_count} products were successfully updated.', 
-            messages.ERROR    #Message we want to show to users
+            f'{updated_count} products were successfully updated.',
+            messages.ERROR  # Message we want to show to users
         )
 
 
@@ -108,14 +101,15 @@ class CustomerAdmin(admin.ModelAdmin):
             orders_count=Count('order')
         )
 
-#Editing Children Using Inlines
+# Editing Children Using Inlines
+
+
 class OrderItemInline(admin.TabularInline):
     autocomplete_fields = ['product']
     min_num = 1
     max_num = 10
     model = models.OrderItem
     extra = 0
-
 
 
 @admin.register(models.Order)
