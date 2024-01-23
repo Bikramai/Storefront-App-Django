@@ -100,13 +100,14 @@ class CustomerAdmin(admin.ModelAdmin):
             orders_count=Count('order')
         )
 
-
+#Editing Children Using Inlines
 class OrderItemInline(admin.TabularInline):
     autocomplete_fields = ['product']
     min_num = 1
     max_num = 10
     model = models.OrderItem
     extra = 0
+    
 
 
 @admin.register(models.Order)
